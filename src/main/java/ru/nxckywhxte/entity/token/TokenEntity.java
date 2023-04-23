@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.nxckywhxte.entity.admin.AdminEntity;
+import ru.nxckywhxte.entity.user.UserEntity;
 
 import java.util.UUID;
 
@@ -30,6 +30,6 @@ public class TokenEntity {
     public boolean expired;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admin_id")
-    public AdminEntity admin;
+    @JoinColumn(name = "user_id")
+    public UserEntity user;
 }

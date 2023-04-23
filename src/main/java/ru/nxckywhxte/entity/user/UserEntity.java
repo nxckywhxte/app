@@ -1,23 +1,29 @@
-package ru.nxckywhxte.entity.admin;
+package ru.nxckywhxte.entity.user;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.nxckywhxte.entity.profile.ProfileEntity;
 import ru.nxckywhxte.entity.role.RoleEntity;
 
 import java.util.Collection;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Table(name = "admins")
+
+@Table(name = "users")
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Data
-public class AdminEntity implements UserDetails {
+public class UserEntity implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -26,6 +32,12 @@ public class AdminEntity implements UserDetails {
     private String email;
 
     private String password;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinTable(name = "users_profiles",
+    joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+    inverseJoinColumns = {@JoinColumn(name = "profile_id", referencedColumnName = "id")})
+    private ProfileEntity profile;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
