@@ -1,15 +1,20 @@
 package ru.nxckywhxte.entity.user;
 
 import jakarta.persistence.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import ru.nxckywhxte.dto.auth.AuthenticationRequest;
+import ru.nxckywhxte.dto.auth.AuthenticationResponse;
+import ru.nxckywhxte.dto.auth.RegisterRequest;
 import ru.nxckywhxte.entity.profile.ProfileEntity;
 import ru.nxckywhxte.entity.role.RoleEntity;
+import ru.nxckywhxte.entity.EntityClass;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -22,7 +27,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 @Data
-public class UserEntity implements UserDetails {
+public class UserEntity extends EntityClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -51,9 +56,7 @@ public class UserEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(roleEntity -> {
-            return new SimpleGrantedAuthority(roleEntity.getName());
-        }).collect(Collectors.toList());
+        return roles.stream().map(roleEntity -> new SimpleGrantedAuthority(roleEntity.getName())).collect(Collectors.toList());
     }
 
     @Override
@@ -84,5 +87,34 @@ public class UserEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+
+    /**
+     * Пишем реализацию регистрации (собрать это представление).
+     **/
+    @Override
+    public AuthenticationResponse register(RegisterRequest request) {
+        return null;
+    }
+
+    @Override
+    public AuthenticationResponse login(AuthenticationRequest request) {
+        return null;
+    }
+
+    @Override
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
+
+    }
+
+    @Override
+    protected void revokeAllTokens(EntityClass entity) {
+
+    }
+
+    @Override
+    protected void saveToken(EntityClass entity, String jwtToken) {
+
     }
 }
